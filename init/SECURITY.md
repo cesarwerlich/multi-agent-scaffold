@@ -19,6 +19,14 @@ Document how vulnerabilities should be reported for this project.
 | Personal data | <!-- yes/no --> | <!-- handling notes --> |
 | Payment/regulated data | <!-- yes/no --> | <!-- handling notes --> |
 
+## Commit Identity
+
+Some CI/CD and deploy integrations match a commit's author email to a
+connected git-hosting account before they'll build — a mismatch fails
+silently until deploy time. If that applies to your setup, run
+`./scripts/check-commit-identity.sh` in CI or a pre-push hook; it's opt-in
+and does nothing on its own.
+
 ## Security Baseline
 
 - Validate all external input at system boundaries.
