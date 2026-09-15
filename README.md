@@ -1,8 +1,15 @@
 # Universal Repo Init Template
 
+[![CI](https://github.com/cesarwerlich/repo-template/actions/workflows/ci.yml/badge.svg)](https://github.com/cesarwerlich/repo-template/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Reusable starter files for new repositories and work folders. The template is intentionally stack-neutral: it gives each project a clear operating model, agent instructions, memory, security/ops docs, and lightweight scripts without assuming Node, Python, Go, Rust, or any single deployment target.
 
 It is also tool-neutral: `AGENTS.md` is the canonical shared contract, while `CLAUDE.md` and `ANTIGRAVITY.md` are thin compatibility wrappers that point back to the shared docs.
+
+## Why This Exists
+
+I run several AI coding agents in parallel across different projects — each in its own git worktree, each accountable to an issue and a PR, none of them allowed to merge their own work. That only stays sane if every repo starts from the same operating model: where memory lives, how a lane is picked up and closed out, what "done" means before a human looks at it. This is that starting point, extracted once instead of rebuilt per project. It's plain scripts and docs, not a framework — audit it in a few minutes, keep what's useful, delete what isn't.
 
 ## What Gets Copied
 
@@ -26,7 +33,9 @@ init/
     check.sh
     lane-update.mjs
     worktree-bootstrap.sh
+    worktree-finish.sh
     worktree-cleanup.sh
+    check-commit-identity.sh
     new-repo.sh
   .github/
     workflows/{ci.yml, security.yml}
@@ -40,9 +49,9 @@ init/
     adr/  history/  specs/  agents/  runbooks/  template-adoption/
 ```
 
-The root `skills/`, `agents/`, and `references/` folders are the single source for the bundled agent subsystem. They are **not** committed under `init/`; instead `new-repo.sh` generates them into each new repo's `.agents/` at creation time, so there is no stored duplicate to drift. `docs/agents/` ships as a shared home for tool-neutral personas and playbooks.
+The root `skills/`, `agents/`, and `references/` folders are the single source for the bundled agent subsystem, vendored from [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) (MIT — see [`NOTICE.md`](NOTICE.md)). They are **not** committed under `init/`; instead `new-repo.sh` generates them into each new repo's `.agents/` at creation time, `LICENSE` included, so there is no stored duplicate to drift. `docs/agents/` ships as a shared home for tool-neutral personas and playbooks.
 
-The default payload now also includes lane coordination scaffolding for teams that want one issue, one worktree, and one PR per agent lane.
+The default payload also includes lane coordination scaffolding for teams that want one issue, one worktree, and one PR per agent lane: `worktree-bootstrap.sh` opens a lane, `worktree-finish.sh` verifies it (clean tree, not behind its base, checks pass) and opens the PR, and it's never allowed to merge itself.
 
 ## Use It
 
@@ -88,7 +97,7 @@ See `docs/adopting-existing-repos.md` for what gets created, folder guidance, an
 ./scripts/validate-template.sh
 ```
 
-Validation checks for unresolved placeholders, required payload files, malformed skill frontmatter, broken local markdown links, and ignored OS/secret files.
+Validation checks for unresolved placeholders, required payload files, malformed skill frontmatter, broken local markdown links, unresolved merge-conflict markers, and ignored OS/secret files. CI runs this on every push and PR, plus a dry-run generation, so a broken payload never reaches `main` silently.
 
 5. Dry-run a new repo to confirm the full tree generates correctly:
 
@@ -109,6 +118,7 @@ Validation checks for unresolved placeholders, required payload files, malformed
 | `docs/adopting-existing-repos.md` | Adoption profiles and conflict-safe guidance |
 | `init/` | The payload — what new projects receive |
 | `skills/` | Source for bundled agent skills (generated into `.agents/` at create time) |
+| `NOTICE.md` | Third-party attribution for the vendored skills subsystem |
 
 ## Design Principles
 
