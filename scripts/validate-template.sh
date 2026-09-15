@@ -62,6 +62,12 @@ if find . -type f \( -name ".env" -o -name "*.pem" -o -name "*.key" \) -print | 
   fail "secret-like files are present"
 fi
 
+conflict_markers="$(grep -rlE '^(<<<<<<<|=======|>>>>>>>)' --exclude-dir=.git . 2>/dev/null || true)"
+if [ -n "$conflict_markers" ]; then
+  echo "$conflict_markers" >&2
+  fail "unresolved merge-conflict markers found"
+fi
+
 placeholder_output="$(mktemp)"
 while IFS= read -r match; do
   case "$match" in
