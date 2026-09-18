@@ -1,6 +1,6 @@
 # Template Adoption Reports
 
-This folder stores reports created when `repo-template` is adopted into an existing repository.
+This folder stores reports created when this template is adopted into an existing repository.
 
 Reports should list:
 

@@ -1,6 +1,6 @@
 # Universal Repo Init Template
 
-[![CI](https://github.com/cesarwerlich/repo-template/actions/workflows/ci.yml/badge.svg)](https://github.com/cesarwerlich/repo-template/actions/workflows/ci.yml)
+[![CI](https://github.com/cesarwerlich/multi-agent-scaffold/actions/workflows/ci.yml/badge.svg)](https://github.com/cesarwerlich/multi-agent-scaffold/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Reusable starter files for new repositories and work folders. The template is intentionally stack-neutral: it gives each project a clear operating model, agent instructions, memory, security/ops docs, and lightweight scripts without assuming Node, Python, Go, Rust, or any single deployment target.
