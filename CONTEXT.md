@@ -11,7 +11,7 @@ Developers starting new projects, and AI coding agents working inside generated 
 ## Internal Structure
 
 - `init/` — the payload copied into new projects (docs, scripts, CI, `.agents/`).
-- `skills/`, `agents/`, `references/` — the single source for the agent subsystem. Not committed under `init/`; generated into each new repo's `.agents/` at creation time by `new-repo.sh`.
+- `skills/`, `agents/`, `references/` — the single source for the agent subsystem, vendored from [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) (MIT — see `NOTICE.md`). Not committed under `init/`; generated into each new repo's `.agents/` at creation time by `new-repo.sh`, `LICENSE` files included.
 - `docs/agents/` — shared tool-neutral personas and playbooks in generated repos.
 - `docs/adr/` — architectural decisions about the template itself.
 - `scripts/` — validation and maintenance tooling.

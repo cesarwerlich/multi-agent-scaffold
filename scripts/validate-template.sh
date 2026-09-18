@@ -45,7 +45,9 @@ required_files=(
   "init/scripts/check.sh"
   "init/scripts/new-repo.sh"
   "init/scripts/worktree-bootstrap.sh"
+  "init/scripts/worktree-finish.sh"
   "init/scripts/worktree-cleanup.sh"
+  "init/scripts/check-commit-identity.sh"
   "init/PLAYBOOK.md"
   "scripts/adopt-existing-repo.sh"
 )
@@ -60,6 +62,12 @@ fi
 
 if find . -type f \( -name ".env" -o -name "*.pem" -o -name "*.key" \) -print | grep -q .; then
   fail "secret-like files are present"
+fi
+
+conflict_markers="$(grep -rlE '^(<<<<<<<|=======|>>>>>>>)' --exclude-dir=.git . 2>/dev/null || true)"
+if [ -n "$conflict_markers" ]; then
+  echo "$conflict_markers" >&2
+  fail "unresolved merge-conflict markers found"
 fi
 
 placeholder_output="$(mktemp)"

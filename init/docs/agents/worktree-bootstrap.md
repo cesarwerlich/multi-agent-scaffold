@@ -30,6 +30,20 @@ cd .worktrees/17-lane-protocol
 ./scripts/check.sh
 ```
 
+## Finish
+
+When the lane is ready for review, from inside the worktree:
+
+```bash
+./scripts/worktree-finish.sh
+```
+
+This refuses to run on a dirty tree or a branch that's behind its base,
+runs `./scripts/check.sh`, pushes the branch, and opens (or reuses) a PR
+via the GitHub CLI if it's installed. It never merges — that's the
+coordinator's job. Pass a different base branch as the first argument if
+you're not targeting `main`.
+
 ## Cleanup
 
 After merge:

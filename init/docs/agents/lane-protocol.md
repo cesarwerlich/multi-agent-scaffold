@@ -13,7 +13,7 @@ Use this workflow whenever an agent picks up a scoped implementation lane.
 1. Read the assigned issue and stay within that scope.
 2. Work on an isolated branch and worktree.
 3. Post an issue pickup update before editing files.
-4. Open exactly one PR for the lane.
+4. Run `./scripts/worktree-finish.sh` to verify, push, and open exactly one PR for the lane.
 5. Post a final issue update with verification and PR link.
 6. Do not merge your own PR.
 

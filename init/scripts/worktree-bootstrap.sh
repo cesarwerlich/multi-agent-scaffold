@@ -5,7 +5,6 @@ cd "$(dirname "$0")/.."
 
 if [ "$#" -lt 2 ]; then
   echo "Usage: ./scripts/worktree-bootstrap.sh <issue-number> <slug> [base-branch]"
-<<<<<<< HEAD
   echo "  AGENT_TOOL env var sets the branch prefix (default: agent)"
   echo "  Examples: AGENT_TOOL=claude, AGENT_TOOL=codex, AGENT_TOOL=copilot"
   exit 1
@@ -14,7 +13,6 @@ fi
 ISSUE_NUMBER="$1"
 SLUG="$2"
 BASE_BRANCH="${3:-main}"
-<<<<<<< HEAD
 AGENT_TOOL="${AGENT_TOOL:-agent}"
 BRANCH_NAME="${AGENT_TOOL}/issue-${ISSUE_NUMBER}-${SLUG}"
 WORKTREE_PATH=".worktrees/${ISSUE_NUMBER}-${SLUG}"

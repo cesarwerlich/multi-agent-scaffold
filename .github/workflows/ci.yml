@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate template integrity
+        run: ./scripts/validate-template.sh
+      - name: Dry-run a generated project
+        run: |
+          ./init/scripts/new-repo.sh /tmp/generated-project "Generated Project"
+          cd /tmp/generated-project
+          ./scripts/check.sh
