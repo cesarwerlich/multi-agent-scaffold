@@ -12,6 +12,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate template integrity
         run: ./scripts/validate-template.sh
+      - name: Test init scripts
+        run: ./scripts/test-init-scripts.sh
       - name: Dry-run a generated project
         run: |
           ./init/scripts/new-repo.sh /tmp/generated-project "Generated Project"

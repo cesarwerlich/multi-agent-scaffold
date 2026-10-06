@@ -13,6 +13,8 @@ This creates:
 
 - branch: `claude/issue-17-lane-protocol`
 - worktree: `.worktrees/17-lane-protocol`
+- a symlink to the primary checkout's `.env` (if it has one) — never a copy, so
+  secrets live in one file no matter how many lanes are open
 
 Other examples:
 

@@ -25,8 +25,10 @@ else
   git worktree add -b "${BRANCH_NAME}" "${WORKTREE_PATH}" "${BASE_BRANCH}"
 fi
 
-if [ -f ".env" ] && [ ! -f "${WORKTREE_PATH}/.env" ]; then
-  cp .env "${WORKTREE_PATH}/.env"
+# Link, don't copy: every copy of .env is another place a secret can leak or go
+# stale, and finished worktrees are easy to forget. One real file, N pointers.
+if [ -f ".env" ] && [ ! -e "${WORKTREE_PATH}/.env" ]; then
+  ln -s "$(pwd)/.env" "${WORKTREE_PATH}/.env"
 fi
 
 cat <<EOF
