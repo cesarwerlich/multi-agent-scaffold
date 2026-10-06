@@ -15,7 +15,7 @@ Use this workflow whenever an agent picks up a scoped implementation lane.
 3. Post an issue pickup update before editing files.
 4. Run `./scripts/worktree-finish.sh` to verify, push, and open exactly one PR for the lane.
 5. Post a final issue update with verification and PR link.
-6. Do not merge your own PR.
+6. Do not review or merge your own PR — see [review-protocol.md](review-protocol.md).
 
 ## Recommended rules
 

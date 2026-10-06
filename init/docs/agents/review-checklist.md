@@ -1,6 +1,7 @@
 # Coordinator Review Checklist
 
-Use this when reviewing an agent lane before merge.
+Use this when reviewing an agent lane before merge. The Reviewer role, verdicts,
+and escalation rules live in [review-protocol.md](review-protocol.md).
 
 ## Scope review
 

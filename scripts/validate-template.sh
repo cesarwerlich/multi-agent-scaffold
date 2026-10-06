@@ -38,6 +38,7 @@ required_files=(
   "init/docs/agents/issue-lane-template.md"
   "init/docs/agents/worktree-bootstrap.md"
   "init/docs/agents/review-checklist.md"
+  "init/docs/agents/review-protocol.md"
   "init/docs/history/README.md"
   "init/docs/specs/README.md"
   "init/docs/template-adoption/README.md"
