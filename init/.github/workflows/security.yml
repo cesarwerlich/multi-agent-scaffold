@@ -19,3 +19,5 @@ jobs:
             echo "Potential secret material found. Remove it or update the workflow with an explicit allowlist." >&2
             exit 1
           fi
+      - name: Scan source files for live sessions and JWTs
+        run: ./scripts/scan-secrets.sh

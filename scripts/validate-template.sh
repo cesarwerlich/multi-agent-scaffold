@@ -48,6 +48,7 @@ required_files=(
   "init/scripts/worktree-finish.sh"
   "init/scripts/worktree-cleanup.sh"
   "init/scripts/check-commit-identity.sh"
+  "init/scripts/scan-secrets.sh"
   "init/PLAYBOOK.md"
   "scripts/adopt-existing-repo.sh"
 )

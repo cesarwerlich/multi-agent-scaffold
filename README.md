@@ -36,6 +36,7 @@ init/
     worktree-finish.sh
     worktree-cleanup.sh
     check-commit-identity.sh
+    scan-secrets.sh
     new-repo.sh
   .github/
     workflows/{ci.yml, security.yml}
