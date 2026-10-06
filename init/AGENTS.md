@@ -36,6 +36,10 @@ not memory:
   `TASKS.md`, and move finished items to *Recently Done*.
 - Never edit another session's active task row.
 
+For scoped, issue-driven lanes, `docs/agents/lane-protocol.md` defines the
+workflow, and `docs/agents/review-protocol.md` defines who reviews, what a
+verdict looks like, and when to escalate instead of deciding.
+
 ## Keep Context Lean
 
 - `TASKS.md` is rewritten in place — do not let it grow into a log.

@@ -9,6 +9,9 @@ Document how vulnerabilities should be reported for this project.
 - Never commit `.env`, tokens, private keys, certificates, or generated credentials.
 - Store local examples in `.env.example` with fake values only.
 - Use least-privilege credentials for development, CI, and production.
+- `./scripts/scan-secrets.sh` (run in CI) fails on a JWT or cookie-jar literal in
+  source files — the leak filename checks miss. List intentionally public
+  values (e.g. a client-side anon key) in `.secret-scan-ignore`.
 
 ## Data Classification
 

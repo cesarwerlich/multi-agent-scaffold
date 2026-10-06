@@ -38,6 +38,7 @@ required_files=(
   "init/docs/agents/issue-lane-template.md"
   "init/docs/agents/worktree-bootstrap.md"
   "init/docs/agents/review-checklist.md"
+  "init/docs/agents/review-protocol.md"
   "init/docs/history/README.md"
   "init/docs/specs/README.md"
   "init/docs/template-adoption/README.md"
@@ -47,7 +48,9 @@ required_files=(
   "init/scripts/worktree-bootstrap.sh"
   "init/scripts/worktree-finish.sh"
   "init/scripts/worktree-cleanup.sh"
+  "init/scripts/worktree-reap.sh"
   "init/scripts/check-commit-identity.sh"
+  "init/scripts/scan-secrets.sh"
   "init/PLAYBOOK.md"
   "scripts/adopt-existing-repo.sh"
 )
