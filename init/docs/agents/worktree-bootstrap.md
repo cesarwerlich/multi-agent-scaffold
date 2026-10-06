@@ -48,8 +48,22 @@ you're not targeting `main`.
 
 ## Cleanup
 
-After merge:
+After merge, remove one lane:
 
 ```bash
 ./scripts/worktree-cleanup.sh 17-lane-protocol
 ```
+
+Or sweep every finished lane at once. This is a dry run until you pass
+`--apply`:
+
+```bash
+./scripts/worktree-reap.sh
+./scripts/worktree-reap.sh --apply
+```
+
+It only removes a worktree whose branch has a merged PR (and no open one), with
+no uncommitted changes, and no activity for 2 days (`--min-age-days N` to
+change). It never deletes branches, never touches the worktree you run it from,
+and needs the GitHub CLI (`gh`) to read PR state. Closed-but-unmerged PRs are
+kept on purpose: that work may still matter.

@@ -35,6 +35,7 @@ init/
     worktree-bootstrap.sh
     worktree-finish.sh
     worktree-cleanup.sh
+    worktree-reap.sh
     check-commit-identity.sh
     scan-secrets.sh
     new-repo.sh
