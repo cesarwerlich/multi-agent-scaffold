@@ -19,6 +19,10 @@ cd "$(dirname "$0")/.."
 
 IGNORE_FILE=".secret-scan-ignore"
 
+# Without a git repo the file list below is silently empty and the scan would
+# report a clean result it never earned.
+git rev-parse --git-dir >/dev/null 2>&1 || { echo "scan-secrets: not inside a git repository." >&2; exit 2; }
+
 is_ignored() {
   local path="$1" pattern
   [ -f "$IGNORE_FILE" ] || return 1

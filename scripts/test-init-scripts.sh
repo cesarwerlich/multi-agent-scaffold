@@ -78,6 +78,15 @@ fi
 printf 'COLORS = "a=1; b=2; c=3; d=4"\n' >"$p/fetch.py"
 if scan >/dev/null; then pass "key=value pairs without a session key pass"; else fail "plain key=value pairs should not be flagged"; fi
 
+nogit="$WORK/nogit"
+mkdir -p "$nogit/scripts"
+cp "$TEMPLATE_ROOT/init/scripts/scan-secrets.sh" "$nogit/scripts/"
+if (cd "$nogit" && GIT_CEILING_DIRECTORIES="$WORK" ./scripts/scan-secrets.sh >/dev/null 2>&1); then
+  fail "outside a git repo the scan must fail, not report clean"
+else
+  pass "fails loudly outside a git repository"
+fi
+
 echo
 echo "worktree-reap.sh"
 
