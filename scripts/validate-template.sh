@@ -50,6 +50,7 @@ required_files=(
   "init/scripts/check-commit-identity.sh"
   "init/PLAYBOOK.md"
   "scripts/adopt-existing-repo.sh"
+  "scripts/test-harness.sh"
 )
 
 for path in "${required_files[@]}"; do
@@ -107,5 +108,7 @@ if [ "$failures" -gt 0 ]; then
   echo "$failures validation failure(s)." >&2
   exit 1
 fi
+
+./scripts/test-harness.sh
 
 echo "Template validation passed."

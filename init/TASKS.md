@@ -1,4 +1,8 @@
-# Tasks
+# Tasks (local-only workflow)
+
+Use only when GitHub Issues/PRs are not used for live work tracking. For GitHub
+work, record handoff on the Issue/PR and leave this file unused. Never mirror
+live state between both surfaces.
 
 Live handoff file between work sessions — human or AI, single or concurrent.
 This is the one place that answers: *what is being worked on right now, by whom,

@@ -1,3 +1,5 @@
+GitHub-backed projects use Issues/PRs for live state. TASKS references below
+apply only to local-only work; never mirror live state between both surfaces.
 # Agent Roster
 
 Define your project's agent team here. Each role maps to a persona file in `.claude/agents/<role>.md`.

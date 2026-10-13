@@ -1,5 +1,8 @@
 # Project Name
 
+GitHub-backed work uses Issues/PRs for live state. References to `TASKS.md`
+below apply only to local-only work; never mirror live state between both surfaces.
+
 Short description of what this project does, who it serves, and why it exists.
 
 ## Quick Start
@@ -48,7 +51,7 @@ node ./scripts/lane-update.mjs --help
 ```text
 .
   CONTEXT.md      Purpose, architecture, constraints
-  TASKS.md        Live handoff: current objective, active work, next action
+  TASKS.md        Optional local-only handoff
   DECISIONS.md    Accepted decisions still in force
   AGENTS.md       Canonical contract for AI coding agents
   scripts/        Bootstrap, checks, and project automation

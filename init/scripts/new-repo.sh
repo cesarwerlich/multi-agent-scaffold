@@ -14,12 +14,15 @@ target_dir="$1"
 project_name="${2:-$(basename "$target_dir")}"
 template_dir="$(cd "$(dirname "$0")/.." && pwd)"
 
+readme_created=0
+[ -e "$target_dir/README.md" ] || [ -L "$target_dir/README.md" ] || readme_created=1
+
 mkdir -p "$target_dir"
 
 copy_missing() {
   src="$1"
   dest="$2"
-  if [ -e "$dest" ]; then
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
     echo "skip existing: $dest"
     return
   fi
@@ -45,7 +48,7 @@ for sub in skills agents references; do
     echo "note: agent source missing, skipping .agents/$sub ($src)" >&2
     continue
   fi
-  if [ -e "$dest" ]; then
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
     echo "skip existing: $dest"
     continue
   fi
@@ -54,12 +57,11 @@ for sub in skills agents references; do
   echo "generated: $dest"
 done
 
-if grep -q '^# Project Name$' "$target_dir/README.md" 2>/dev/null; then
+if [ "$readme_created" -eq 1 ] && grep -q '^# Project Name$' "$target_dir/README.md" 2>/dev/null; then
   tmp_file="$(mktemp)"
   sed "s/^# Project Name$/# ${project_name}/" "$target_dir/README.md" > "$tmp_file"
   mv "$tmp_file" "$target_dir/README.md"
 fi
 
-chmod +x "$target_dir"/scripts/*.sh 2>/dev/null || true
 
 echo "Initialized $project_name at $target_dir"

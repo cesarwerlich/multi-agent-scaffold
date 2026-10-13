@@ -1,5 +1,8 @@
 # Adopting The Template In Existing Repos
 
+GitHub-backed work uses Issues/PRs for live state. References to `TASKS.md`
+below apply only to local-only work; never mirror live state between both surfaces.
+
 Use `scripts/adopt-existing-repo.sh` when a repository already exists and you want to add the template's best-practice structure without creating conflicts.
 
 ## Default Rule
@@ -39,7 +42,7 @@ The minimal profile creates these files (never overwrites existing ones):
 | File | Purpose |
 | --- | --- |
 | `CONTEXT.md` | Purpose, architecture, constraints — fill in after adoption |
-| `TASKS.md` | Live handoff: current work, active sessions, next action |
+| `TASKS.md` | Optional local-only handoff; GitHub work stays on Issues/PRs |
 | `DECISIONS.md` | Accepted decisions still in force |
 | `AGENTS.md` | Canonical agent contract (session start, coordination, safety) |
 | `PLAYBOOK.md` | Why each area exists and how to use it — onboarding for humans and agents |

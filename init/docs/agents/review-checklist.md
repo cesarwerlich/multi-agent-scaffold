@@ -25,3 +25,12 @@ Use this when reviewing an agent lane before merge.
 - Verification is acceptable.
 - Remaining blockers are documented.
 - Coordinator, not the worker, performs the merge.
+
+## Independent verdict
+
+The reviewer must not have implemented the diff. Read the Issue, comments and
+actual diff; run the checks rather than relying on the implementer's summary.
+Record the reviewed head SHA, findings and test evidence with one verdict: PASS,
+REQUEST CHANGES or ESCALATE. A changed head needs another review. Security,
+production, paid or out-of-scope actions need explicit authorization for their
+target; a passing test does not authorize them. Never bypass branch protections.

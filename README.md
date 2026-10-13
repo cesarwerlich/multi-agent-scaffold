@@ -19,7 +19,7 @@ The `init/` directory is the payload for new projects:
 init/
   README.md
   CONTEXT.md       Purpose, architecture, constraints     ┐ startup
-  TASKS.md         Live handoff: active work, next action  ├ reads
+  TASKS.md         Optional local-only handoff  ├ reads
   DECISIONS.md     Accepted decisions still in force       ┘
   AGENTS.md        Canonical agent contract
   CLAUDE.md        Thin wrapper -> AGENTS.md

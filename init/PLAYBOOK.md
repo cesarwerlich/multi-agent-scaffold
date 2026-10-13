@@ -1,5 +1,8 @@
 # Project Playbook
 
+GitHub-backed work uses Issues/PRs for live state. References to `TASKS.md`
+below apply only to local-only work; never mirror live state between both surfaces.
+
 This file explains why each area of this repo exists, what it's for, and how to use it — for humans and AI agents alike. Read it once when you join the project. Refer back when something feels unclear.
 
 ---
