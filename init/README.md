@@ -1,5 +1,8 @@
 # Project Name
 
+GitHub-backed work uses Issues/PRs for live state. References to `TASKS.md`
+below apply only to local-only work; never mirror live state between both surfaces.
+
 Short description of what this project does, who it serves, and why it exists.
 
 ## Quick Start
@@ -20,7 +23,7 @@ cp .env.example .env
 Read these first (kept small on purpose):
 
 - `CONTEXT.md` - purpose, architecture, constraints, and local commands.
-- `TASKS.md` (local-only; use the Issue/PR for GitHub work) - current objective, active work, and handoff between sessions.
+- `TASKS.md` - current objective, active work, and handoff between sessions.
 - `DECISIONS.md` - accepted decisions still in force.
 - `AGENTS.md` - the canonical contract for AI coding agents.
 

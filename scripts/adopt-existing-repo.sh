@@ -267,5 +267,5 @@ else
     write_report "$report_path"
   fi
   echo "Adopted repo-template profile '$profile' into $target_dir"
-  echo "Report: $report_rel"
+  echo "Report path (may be retained from an earlier run): $report_rel"
 fi

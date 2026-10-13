@@ -65,3 +65,17 @@ after merge. Cleanup refuses tracked, untracked or ignored artifacts and branche
 not merged by ancestry; it retains branch refs and never forces removal. Squash
 merges require manual equivalence review. Move necessary local artifacts to a safe
 location before retrying; do not delete them merely to pass a check.
+
+Safe legacy lane/tool names with uppercase letters or underscores remain
+supported, preserving exact case and branch identity. Prefer lowercase kebab-case
+for new lanes. Slashes, dots, whitespace and path traversal in these identifiers
+are rejected; unusual older names require manual inspection, not automatic rename.
+The banner distinguishes creation from resume and reports tracked/untracked dirty
+state. Ignored artifacts remain protected by the cleanup check.
+
+For a registered path that disappeared, inspect `git worktree list --porcelain`
+and locate any moved directory first. Use `git worktree repair <moved-path>` to
+repair a moved worktree, or `git worktree prune --dry-run` to inspect stale
+registrations. Run `git worktree prune` only after confirming the directory and
+local artifacts are gone and no other lane relies on those registrations. A
+locked worktree is preserved; inspect its lock reason before manually unlocking.
