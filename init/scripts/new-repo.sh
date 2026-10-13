@@ -19,22 +19,39 @@ readme_created=0
 
 mkdir -p "$target_dir"
 
-copy_missing() {
-  src="$1"
-  dest="$2"
-  if [ -e "$dest" ] || [ -L "$dest" ]; then
-    echo "skip existing: $dest"
-    return
-  fi
-  mkdir -p "$(dirname "$dest")"
-  cp -R "$src" "$dest"
-  echo "created: $dest"
+work_dir="$(mktemp -d)"
+trap 'rm -rf "$work_dir"' EXIT
+
+# Only listed payload files are copied: tracked files in a Git checkout, or a
+# filtered walk otherwise. See scripts/payload-files.sh.
+list_payload() {
+  "$template_dir/scripts/payload-files.sh" "$1" > "$2"
 }
 
-find "$template_dir" -mindepth 1 -maxdepth 1 | while IFS= read -r item; do
-  base="$(basename "$item")"
-  copy_missing "$item" "$target_dir/$base"
-done
+# copy_listed <list> <src-root> <dest-root> [top-level-item]
+copy_listed() {
+  while IFS= read -r -d '' rel; do
+    if [ -n "${4:-}" ]; then
+      case "$rel" in "$4"|"$4"/*) ;; *) continue ;; esac
+    fi
+    mkdir -p "$(dirname "$3/$rel")"
+    cp -R "$2/$rel" "$3/$rel"
+  done < "$1"
+}
+
+list_payload "$template_dir" "$work_dir/payload"
+while IFS= read -r -d '' rel; do printf '%s\n' "${rel%%/*}"; done < "$work_dir/payload" |
+  LC_ALL=C sort -u > "$work_dir/items"
+
+while IFS= read -r item; do
+  dest="$target_dir/$item"
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
+    echo "skip existing: $dest"
+    continue
+  fi
+  copy_listed "$work_dir/payload" "$template_dir" "$target_dir" "$item"
+  echo "created: $dest"
+done < "$work_dir/items"
 
 # The agent subsystem is single-sourced at the repo root (skills/, agents/,
 # references/) and generated into the new repo's .agents/ here, so there is no
@@ -52,8 +69,9 @@ for sub in skills agents references; do
     echo "skip existing: $dest"
     continue
   fi
-  mkdir -p "$target_dir/.agents"
-  cp -R "$src" "$dest"
+  list_payload "$src" "$work_dir/$sub"
+  mkdir -p "$dest"
+  copy_listed "$work_dir/$sub" "$src" "$dest"
   echo "generated: $dest"
 done
 

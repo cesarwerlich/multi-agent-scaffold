@@ -76,12 +76,41 @@ fi
 created=()
 skipped=()
 
+work_dir="$(mktemp -d)"
+trap 'rm -rf "$work_dir"' EXIT
+
+# Only listed payload files are copied: tracked files in a Git checkout, or a
+# filtered walk otherwise. See init/scripts/payload-files.sh.
+list_payload() {
+  "$template_dir/scripts/payload-files.sh" "$1" > "$2"
+}
+list_payload "$template_dir" "$work_dir/payload"
+
+# listed <list> <item>: succeed if <item> is a listed file or a directory
+# containing listed files.
+listed() {
+  while IFS= read -r -d '' rel; do
+    case "$rel" in "$2"|"$2"/*) return 0 ;; esac
+  done < "$1"
+  return 1
+}
+
+# copy_listed <list> <src-root> <dest-root> [item]
+copy_listed() {
+  while IFS= read -r -d '' rel; do
+    if [ -n "${4:-}" ]; then
+      case "$rel" in "$4"|"$4"/*) ;; *) continue ;; esac
+    fi
+    mkdir -p "$(dirname "$3/$rel")"
+    cp -R "$2/$rel" "$3/$rel"
+  done < "$1"
+}
+
 copy_missing() {
   src_rel="$1"
   dest="$target_dir/$src_rel"
-  src="$template_dir/$src_rel"
 
-  if [ ! -e "$src" ]; then
+  if ! listed "$work_dir/payload" "$src_rel"; then
     echo "Template item missing: $src_rel" >&2
     return
   fi
@@ -93,8 +122,7 @@ copy_missing() {
 
   created+=("$src_rel")
   if [ "$report_only" -eq 0 ]; then
-    mkdir -p "$(dirname "$dest")"
-    cp -R "$src" "$dest"
+    copy_listed "$work_dir/payload" "$template_dir" "$target_dir" "$src_rel"
   fi
 }
 
@@ -141,9 +169,12 @@ copy_github() {
 }
 
 copy_full() {
-  find "$template_dir" -mindepth 1 -maxdepth 1 | sort | while IFS= read -r item; do
-    copy_missing "$(basename "$item")"
-  done
+  while IFS= read -r -d '' rel; do printf '%s\n' "${rel%%/*}"; done < "$work_dir/payload" |
+    LC_ALL=C sort -u > "$work_dir/items"
+  # Read from a file, not a pipe, so created/skipped survive for the report.
+  while IFS= read -r item; do
+    copy_missing "$item"
+  done < "$work_dir/items"
 }
 
 case "$profile" in
@@ -177,8 +208,9 @@ if [ "$profile" = "full" ]; then
     fi
     created+=("$dest_rel")
     if [ "$report_only" -eq 0 ]; then
-      mkdir -p "$target_dir/.agents"
-      cp -R "$src" "$dest"
+      list_payload "$src" "$work_dir/$sub"
+      mkdir -p "$dest"
+      copy_listed "$work_dir/$sub" "$src" "$dest"
     fi
   done
 fi

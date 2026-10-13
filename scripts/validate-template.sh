@@ -44,6 +44,7 @@ required_files=(
   "init/.github/ISSUE_TEMPLATE/agent_lane.md"
   "init/scripts/check.sh"
   "init/scripts/new-repo.sh"
+  "init/scripts/payload-files.sh"
   "init/scripts/worktree-bootstrap.sh"
   "init/scripts/worktree-finish.sh"
   "init/scripts/worktree-cleanup.sh"

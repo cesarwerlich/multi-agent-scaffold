@@ -8,6 +8,8 @@ This template should stay easy to copy, easy to audit, and hard to misuse.
 - Avoid adding dependencies to the template maintenance flow.
 - Keep scripts POSIX-friendly Bash where practical.
 - Update `scripts/validate-template.sh` when adding required payload files.
+- `git add` new payload files before a dry-run generation: only tracked files are copied into new or adopted repos.
+- Lanes for this template opened with `init/scripts/worktree-bootstrap.sh` live in `init/.worktrees/`; they are ignored and never copied into generated repos.
 - Preserve the optional agent subsystem, but do not let it dominate the universal init experience.
 
 ## Trimming the Template

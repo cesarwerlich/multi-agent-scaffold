@@ -39,6 +39,10 @@ coverage/
 .turbo/
 .parcel-cache/
 
+# Local agent lanes and tool state
+.worktrees/
+.serena/
+
 # Logs
 *.log
 npm-debug.log*

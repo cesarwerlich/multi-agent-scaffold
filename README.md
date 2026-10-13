@@ -37,6 +37,7 @@ init/
     worktree-cleanup.sh
     check-commit-identity.sh
     new-repo.sh
+    payload-files.sh
   .github/
     workflows/{ci.yml, security.yml}
     pull_request_template.md
@@ -68,7 +69,9 @@ Then in the new project:
 ./scripts/check.sh
 ```
 
-If the target folder already exists, `new-repo.sh` copies only missing files and leaves existing files untouched.
+If the target folder already exists, `new-repo.sh` copies only missing top-level items and leaves existing ones untouched.
+
+Only files tracked by Git in the template checkout are copied (`init/scripts/payload-files.sh`), so local worktrees, ignored secrets, and scratch files never reach a new or adopted repo. From a plain copy without Git metadata, a filtered walk excludes `.git`, `.worktrees`, `.env*` (except `.env.example`), keys, logs, and OS files.
 
 ### Existing repository
 

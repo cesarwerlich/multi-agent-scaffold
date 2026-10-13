@@ -125,4 +125,59 @@ ln -s "$fixture/absent-new" "$fixture/symlink-new/README.md"
 "$root/init/scripts/new-repo.sh" "$fixture/symlink-new" Test > /dev/null
 [ ! -e "$fixture/absent-adopt" ] || fail 'adoption followed dangling destination'
 [ ! -e "$fixture/absent-new" ] || fail 'generation followed dangling destination'
+# Issue #11: generation and full adoption copy only the tracked payload, never
+# a maintainer's local worktrees, ignored secrets or scratch files.
+tpl="$fixture/template"
+mkdir "$tpl"
+(cd "$root" && git ls-files -z --cached --others --exclude-standard) |
+  while IFS= read -r -d '' rel; do
+    [ -e "$root/$rel" ] || [ -L "$root/$rel" ] || continue
+    mkdir -p "$(dirname "$tpl/$rel")"
+    cp -R "$root/$rel" "$tpl/$rel"
+  done
+git -C "$tpl" init -q -b main
+git -C "$tpl" add -A
+git -C "$tpl" -c user.name='Harness Fixture' -c user.email='fixture@example.invalid' commit -qm template
+git -C "$tpl" worktree add -q -b agent/issue-9-stale init/.worktrees/9-stale
+plant() { mkdir -p "$(dirname "$1")"; printf 'contaminant\n' > "$1"; }
+for junk in init/.env init/.DS_Store init/scratch.tmp init/docs/notes.local.md \
+  init/scripts/debug.log skills/.DS_Store skills/draft-skill/SKILL.md agents/private.md; do
+  plant "$tpl/$junk"
+done
+git -C "$tpl/init" ls-files | LC_ALL=C sort > "$fixture/expected-init"
+git -C "$tpl/skills" ls-files | LC_ALL=C sort > "$fixture/expected-skills"
+listing() { (cd "$1" && find . \( -type f -o -type l \) | sed 's|^\./||' | LC_ALL=C sort); }
+assert_clean() {
+  [ ! -e "$1/.worktrees" ] || fail "$2 copied a worktree"
+  [ ! -e "$1/.env" ] || fail "$2 copied an ignored secret"
+  if grep -rl '^gitdir:' "$1" 2>/dev/null | grep -q .; then fail "$2 copied a gitdir pointer"; fi
+  if grep -rl 'contaminant' "$1" 2>/dev/null | grep -q .; then fail "$2 copied untracked files"; fi
+  [ -f "$1/.env.example" ] || fail "$2 dropped .env.example"
+}
+"$tpl/init/scripts/new-repo.sh" "$fixture/clean-new" Clean > /dev/null
+assert_clean "$fixture/clean-new" generation
+listing "$fixture/clean-new" | grep -v '^\.agents/[sar]' > "$fixture/actual-init" || true
+cmp -s "$fixture/expected-init" "$fixture/actual-init" || fail 'generation differs from tracked payload'
+listing "$fixture/clean-new/.agents/skills" > "$fixture/actual-skills"
+cmp -s "$fixture/expected-skills" "$fixture/actual-skills" || fail 'generated skills differ from tracked skills'
+[ -x "$fixture/clean-new/scripts/worktree-finish.sh" ] || fail 'generation lost executable mode'
+mkdir "$fixture/clean-adopt"
+printf 'owner contract\n' > "$fixture/clean-adopt/AGENTS.md"
+"$tpl/scripts/adopt-existing-repo.sh" --profile full "$fixture/clean-adopt" > /dev/null
+assert_clean "$fixture/clean-adopt" 'full adoption'
+[ "$(cat "$fixture/clean-adopt/AGENTS.md")" = 'owner contract' ] || fail 'full adoption overwrote contract'
+adopt_report="$fixture/clean-adopt/docs/template-adoption/$(date +%F)-repo-template-adoption.md"
+grep -q '^- `AGENTS.md`$' "$adopt_report" || fail 'full adoption report lost skipped items'
+grep -q '^- `scripts`$' "$adopt_report" || fail 'full adoption report lost created items'
+# A plain copy without Git metadata falls back to a filtered walk.
+plain="$fixture/plain-template"
+cp -R "$tpl" "$plain"
+rm -rf "$plain/.git"
+[ -f "$plain/init/.worktrees/9-stale/.git" ] || fail 'fixture lost the stale worktree'
+"$plain/init/scripts/new-repo.sh" "$fixture/plain-new" Plain > /dev/null
+[ ! -e "$fixture/plain-new/.worktrees" ] || fail 'fallback copied a worktree'
+[ ! -e "$fixture/plain-new/.env" ] || fail 'fallback copied an ignored secret'
+[ ! -e "$fixture/plain-new/.DS_Store" ] || fail 'fallback copied OS metadata'
+[ ! -e "$fixture/plain-new/scripts/debug.log" ] || fail 'fallback copied a log'
+[ -f "$fixture/plain-new/.env.example" ] || fail 'fallback dropped .env.example'
 echo 'Harness integration contracts passed.'
