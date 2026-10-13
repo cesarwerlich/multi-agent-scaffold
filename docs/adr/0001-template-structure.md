@@ -16,12 +16,12 @@ New projects need consistent scaffolding: documentation, CI, scripts, and option
 
 3. **Shell scripts over a generator framework.** `bootstrap.sh`, `check.sh`, and `new-repo.sh` are small, POSIX-friendly Bash scripts with no dependencies. They detect the project's stack from marker files (`package.json`, `go.mod`, `pyproject.toml`, `Cargo.toml`) rather than requiring configuration. This keeps the template zero-dependency and easy to audit.
 
-4. **`AGENTS.md` is canonical; `CLAUDE.md` and `ANTIGRAVITY.md` are thin wrappers.** `AGENTS.md` holds the full contract (session start, multi-session coordination, safety, verification). The tool-specific files exist only so tools that look for them find their way to `AGENTS.md`; they carry no separate policy. This keeps one source and lets new agent tools join with a 3-line pointer. *(Amended: originally `CLAUDE.md` was described as the primary file, which contradicted the canonical-`AGENTS.md` model used everywhere else.)*
+4. **`AGENTS.md` is canonical; tool adapters exist only where a tool needs one.** `AGENTS.md` holds the full contract (session start, multi-session coordination, safety, verification). Adapters carry no separate policy. *(Amended for #12: a prose pointer does not load anything. `CLAUDE.md` now imports `@AGENTS.md`, because Claude Code skips `AGENTS.md` when a `CLAUDE.md` exists. `ANTIGRAVITY.md` was removed because Antigravity reads `AGENTS.md` and no tool loads that file. See `init/docs/agent-tool-loading.md`.)* *(Amended: originally `CLAUDE.md` was described as the primary file, which contradicted the canonical-`AGENTS.md` model used everywhere else.)*
 
 ## Consequences
 
 - Easier: The agent subsystem has one home (root) and is generated on demand, so there is no committed copy to keep in sync.
-- Easier: New projects start with a safety baseline (SECURITY.md, OPERATIONS.md) without any tooling dependency.
+- Easier: New projects start with a safety baseline (`SECURITY.md`, `docs/operations.md`) without any tooling dependency.
 - Harder: Adding a new required payload file means updating both the `init/` tree and `scripts/validate-template.sh`.
 - Constraint: `init/` must stay stack-neutral — no project-specific names, URLs, or secrets.
 

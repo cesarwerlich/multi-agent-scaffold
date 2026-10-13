@@ -23,7 +23,7 @@ New projects inherit scaffolding docs and skills. Most projects don't need every
 | Frontend app | Keep all or remove `api-and-interface-design` if no API |
 | Scratch / spike | Remove `.agents/` entirely, keep `README.md` and `CONTEXT.md` only |
 
-The `SECURITY.md`, `OPERATIONS.md`, and `ROADMAP.md` scaffolding files are safe to delete if the project doesn't need them. Nothing breaks.
+The generated `SECURITY.md`, `docs/operations.md`, and `docs/roadmap.md` scaffolding files are safe to delete if the project doesn't need them. Nothing breaks.
 
 ## Review Checklist
 

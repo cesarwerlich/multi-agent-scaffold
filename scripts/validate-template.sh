@@ -15,7 +15,6 @@ required_files=(
   "init/CONTEXT.md"
   "init/AGENTS.md"
   "init/CLAUDE.md"
-  "init/ANTIGRAVITY.md"
   "init/TASKS.md"
   "init/DECISIONS.md"
   "init/SECURITY.md"
@@ -33,6 +32,7 @@ required_files=(
   "init/docs/evals.md"
   "init/docs/operations.md"
   "init/docs/release.md"
+  "init/docs/agent-tool-loading.md"
   "init/docs/agents/README.md"
   "init/docs/agents/lane-protocol.md"
   "init/docs/agents/issue-lane-template.md"
@@ -52,6 +52,7 @@ required_files=(
   "init/PLAYBOOK.md"
   "scripts/adopt-existing-repo.sh"
   "scripts/test-harness.sh"
+  "scripts/check-doc-paths.sh"
 )
 
 for path in "${required_files[@]}"; do
@@ -104,6 +105,17 @@ while IFS= read -r md_file; do
     fi
   done < <(grep -Eo '\[[^]]+\]\([^)]+\)' "$md_file" | sed -E 's/^.*\(([^)]+)\)$/\1/' || true)
 done < <(find . -name "*.md" -type f | sort)
+
+for base in . init; do
+  ./scripts/check-doc-paths.sh "$base" AGENTS.md CLAUDE.md CONTEXT.md ||
+    fail "stale backticked path in $base instruction files"
+done
+
+# Codex truncates AGENTS.md at 32 KiB; keep the payload contract well below it.
+agents_bytes="$(wc -c <init/AGENTS.md | tr -d ' ')"
+if [ "$agents_bytes" -gt 8192 ]; then
+  echo "WARN: init/AGENTS.md is $agents_bytes bytes; budget is 8192" >&2
+fi
 
 if [ "$failures" -gt 0 ]; then
   echo "$failures validation failure(s)." >&2

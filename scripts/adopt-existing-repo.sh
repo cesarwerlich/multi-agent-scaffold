@@ -130,7 +130,6 @@ copy_minimal() {
   for item in \
     AGENTS.md \
     CLAUDE.md \
-    ANTIGRAVITY.md \
     CONTEXT.md \
     TASKS.md \
     DECISIONS.md \
@@ -141,6 +140,7 @@ copy_minimal() {
     docs/testing.md \
     docs/evals.md \
     docs/operations.md \
+    docs/agent-tool-loading.md \
     docs/agents/README.md \
     docs/agents/lane-protocol.md \
     docs/agents/issue-lane-template.md \

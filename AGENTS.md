@@ -8,7 +8,7 @@ This repository maintains a universal repo initializer. The copyable project pay
 
 ## Start Here
 
-1. Read `README.md` to understand the template layout.
+1. Read `README.md` to understand the template layout, then `CONTEXT.md` for architecture and constraints.
 2. Inspect `init/` before changing any project bootstrap behavior.
 3. Use matching skills from `skills/` when the task benefits from a workflow, but gather repo context first.
 4. Preserve user changes. Do not revert unrelated edits.
@@ -20,7 +20,7 @@ This repository maintains a universal repo initializer. The copyable project pay
 - Do not add project-specific names, URLs, secrets, or hardcoded package-manager assumptions to the payload.
 - Prefer small shell scripts with clear output over a generator framework.
 - When adding a new required payload file, update `scripts/validate-template.sh`.
-- Treat `AGENTS.md` as canonical for shared instructions. Tool-specific wrappers like `CLAUDE.md` and `ANTIGRAVITY.md` should stay thin and defer back here.
+- Treat `AGENTS.md` as canonical for shared instructions. `CLAUDE.md` only imports it (`@AGENTS.md`) plus Claude-only notes; add no adapter a supported tool does not load. Tool loading facts live in `init/docs/agent-tool-loading.md`.
 
 ## Agent Skills
 
@@ -50,7 +50,7 @@ Skills ship in `skills/` and are generated into `.agents/skills/` at repo creati
 ### Maintaining Skills
 
 - Every skill lives in `skills/<name>/SKILL.md` with YAML frontmatter (`name`, `description`).
-- Keep `SKILL.md` focused on workflow and exit criteria. Put long checklists in `references/`.
+- Keep each skill file focused on workflow and exit criteria. Put long checklists in `references/`.
 - Run `./scripts/validate-template.sh` after changing skills.
 - The root `skills/`, `agents/`, `references/` directories are the single source — never commit copies under `init/`.
 
@@ -59,8 +59,9 @@ Skills ship in `skills/` and are generated into `.agents/skills/` at repo creati
 - Never commit `.env`, secrets, tokens, generated credentials, or private keys.
 - Ask before changing security-sensitive defaults, CI enforcement, or scripts that overwrite user files.
 - Run `./scripts/validate-template.sh` before finishing template changes.
-- For generated sample repos, run their `./scripts/check.sh` when relevant.
+- When changing generated-project scripts, dry-run a temporary generated repo and run its check script (`init/scripts/check.sh` in the payload).
+- Do not invent missing project facts; record unknowns in `JOURNAL.md` or ask.
 
 ## Memory
 
-Use `JOURNAL.md` for template-maintenance notes. New repos get their own `MEMORY.md` and should not inherit template-maintenance history.
+Use `JOURNAL.md` for template-maintenance notes. New repos get their own `init/docs/memory.md` and should not inherit template-maintenance history.

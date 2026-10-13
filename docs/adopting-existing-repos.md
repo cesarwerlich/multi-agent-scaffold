@@ -46,8 +46,8 @@ The minimal profile creates these files (never overwrites existing ones):
 | `DECISIONS.md` | Accepted decisions still in force |
 | `AGENTS.md` | Canonical agent contract (session start, coordination, safety) |
 | `PLAYBOOK.md` | Why each area exists and how to use it — onboarding for humans and agents |
-| `CLAUDE.md` | Thin pointer → `AGENTS.md` |
-| `ANTIGRAVITY.md` | Thin pointer → `AGENTS.md` |
+| `CLAUDE.md` | Imports `AGENTS.md` (`@AGENTS.md`) so Claude Code loads it |
+| `docs/agent-tool-loading.md` | How each agent tool loads instructions, with sources |
 | `docs/roadmap.md` | Priorities and open questions |
 | `docs/memory.md` | Durable facts, traps, compiled Q&A |
 | `docs/journal.md` | Chronological notes and discussion outcomes |
@@ -64,7 +64,7 @@ The `full` profile also generates `.agents/` (skills, personas, references) from
 ## Folder Guidance
 
 - `AGENTS.md`: canonical shared instructions for Codex, Claude, Antigravity, Copilot, and other coding agents.
-- `CLAUDE.md`, `ANTIGRAVITY.md`: thin compatibility wrappers that point back to `AGENTS.md`.
+- `CLAUDE.md`: imports `AGENTS.md`. Claude Code skips `AGENTS.md` whenever a `CLAUDE.md` exists, so the import is what loads the contract.
 - `docs/agents/`: tool-neutral playbooks, rubrics, and personas.
 - `docs/agents/lane-protocol.md`: recommended when the repo will use multiple agents or worktrees in parallel.
 - `.agents/`: optional bundled skills, specialist personas, and references — generated, not committed.
@@ -74,6 +74,13 @@ The `full` profile also generates `.agents/` (skills, personas, references) from
 - `tests/`: create when the repo contains code and has a real test suite.
 - `evals/`: create only for repeatable eval artifacts (datasets, fixtures, run logs).
 - `src/`: do not create automatically. Existing repos decide their source layout.
+
+## Migrating Older Adoptions
+
+Adoption never deletes or rewrites files. Repos adopted from older versions may need two manual fixes:
+
+- **`CLAUDE.md` without an import.** If an existing `CLAUDE.md` only says "read `AGENTS.md`", Claude Code does not load `AGENTS.md` by itself. Add `@AGENTS.md` on its own line at the top.
+- **`ANTIGRAVITY.md`.** Antigravity reads `AGENTS.md` natively and never loads `ANTIGRAVITY.md`. Move anything unique in it into `AGENTS.md` (or `.agents/rules/`), then delete it.
 
 ## Manual Merge Policy
 

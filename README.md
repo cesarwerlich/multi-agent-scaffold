@@ -5,7 +5,7 @@
 
 Reusable starter files for new repositories and work folders. The template is intentionally stack-neutral: it gives each project a clear operating model, agent instructions, memory, security/ops docs, and lightweight scripts without assuming Node, Python, Go, Rust, or any single deployment target.
 
-It is also tool-neutral: `AGENTS.md` is the canonical shared contract, while `CLAUDE.md` and `ANTIGRAVITY.md` are thin compatibility wrappers that point back to the shared docs.
+It is also tool-neutral: `AGENTS.md` is the canonical shared contract. Codex and Antigravity read it natively, and `CLAUDE.md` imports it (`@AGENTS.md`) for Claude Code. [How each tool loads instructions](init/docs/agent-tool-loading.md) lists the sources and when they were checked.
 
 ## Why This Exists
 
@@ -22,8 +22,7 @@ init/
   TASKS.md         Optional local-only handoff  ├ reads
   DECISIONS.md     Accepted decisions still in force       ┘
   AGENTS.md        Canonical agent contract
-  CLAUDE.md        Thin wrapper -> AGENTS.md
-  ANTIGRAVITY.md   Thin wrapper -> AGENTS.md
+  CLAUDE.md        Imports AGENTS.md for Claude Code
   PLAYBOOK.md      Why each area exists and how to use it
   SECURITY.md  SUPPORT.md  CONTRIBUTING.md  CODEOWNERS   (kept at root for GitHub)
   .env.example  .gitignore  .editorconfig

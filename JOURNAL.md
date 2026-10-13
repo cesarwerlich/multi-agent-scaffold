@@ -1,6 +1,6 @@
 # Template Session Journal
 
-Running log of decisions, changes, and discussions about this template repository. New projects receive their own `MEMORY.md`; do not copy this maintenance journal into generated repos.
+Running log of decisions, changes, and discussions about this template repository. New projects receive their own `docs/memory.md`; do not copy this maintenance journal into generated repos.
 
 ## Instructions for AI Coding Assistants
 

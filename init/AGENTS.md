@@ -1,8 +1,8 @@
 # AGENTS.md
 
 Instructions for AI coding agents working in this repository. This is the
-canonical contract. Tool-specific files (`CLAUDE.md`, `ANTIGRAVITY.md`) are thin
-pointers back here.
+canonical contract. Codex and Antigravity read it natively; `CLAUDE.md` imports
+it for Claude Code (see `docs/agent-tool-loading.md`).
 
 ## Start Every Session
 
