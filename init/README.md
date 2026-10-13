@@ -34,7 +34,7 @@ Read on demand:
 - `docs/journal.md` - chronological notes and discussion outcomes.
 - `docs/testing.md` / `docs/evals.md` - verification and benchmark notes.
 - `docs/agents/lane-protocol.md` - issue lanes, worktrees, and coordinator rules when multiple agents work in parallel.
-- `CLAUDE.md` and `ANTIGRAVITY.md` - thin tool wrappers that point back to `AGENTS.md`.
+- `CLAUDE.md` - imports `AGENTS.md` for Claude Code; `docs/agent-tool-loading.md` explains how each tool loads instructions.
 
 ## Common Commands
 

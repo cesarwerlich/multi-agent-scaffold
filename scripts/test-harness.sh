@@ -180,4 +180,28 @@ rm -rf "$plain/.git"
 [ ! -e "$fixture/plain-new/.DS_Store" ] || fail 'fallback copied OS metadata'
 [ ! -e "$fixture/plain-new/scripts/debug.log" ] || fail 'fallback copied a log'
 [ -f "$fixture/plain-new/.env.example" ] || fail 'fallback dropped .env.example'
+# Issue #12: Claude Code skips AGENTS.md whenever a CLAUDE.md exists, so the
+# adapter must import it; no payload file may be an adapter no tool loads.
+imports_agents() { head -n 1 "$1" | grep -qx '@AGENTS.md'; }
+imports_agents "$fixture/generated/CLAUDE.md" || fail 'generated CLAUDE.md does not import AGENTS.md'
+imports_agents "$root/CLAUDE.md" || fail 'root CLAUDE.md does not import AGENTS.md'
+[ ! -e "$fixture/generated/ANTIGRAVITY.md" ] || fail 'generation shipped a dead ANTIGRAVITY.md'
+[ -f "$fixture/generated/docs/agent-tool-loading.md" ] || fail 'generation lost the tool loading table'
+imports_agents "$fixture/minimal/CLAUDE.md" || fail 'adopted CLAUDE.md does not import AGENTS.md'
+[ ! -e "$fixture/minimal/ANTIGRAVITY.md" ] || fail 'adoption shipped a dead ANTIGRAVITY.md'
+# Adoption stays additive: an owner's legacy adapter is never removed.
+mkdir "$fixture/legacy-adopt"
+printf 'legacy adapter\n' > "$fixture/legacy-adopt/ANTIGRAVITY.md"
+"$root/scripts/adopt-existing-repo.sh" "$fixture/legacy-adopt" > /dev/null
+[ "$(cat "$fixture/legacy-adopt/ANTIGRAVITY.md")" = 'legacy adapter' ] || fail 'adoption touched a legacy adapter'
+# The validator's path check rejects a planted stale path and accepts real,
+# optional and generated ones.
+docs="$fixture/doc-paths"
+mkdir -p "$docs/docs" "$docs/scripts"
+: > "$docs/docs/memory.md"
+printf 'Read `docs/memory.md`, `./scripts/`, `CLAUDE.local.md`, `.agents/skills/` and `git log`.\n' > "$docs/AGENTS.md"
+"$root/scripts/check-doc-paths.sh" "$docs" AGENTS.md CLAUDE.md || fail 'path check rejected valid paths'
+printf 'Ground in `ROADMAP.md`.\n' > "$docs/CLAUDE.md"
+reject "$root/scripts/check-doc-paths.sh" "$docs" AGENTS.md CLAUDE.md
+grep -q 'CLAUDE.md names missing path: ROADMAP.md' "$fixture/rejected.log" || fail 'path check missed a stale path'
 echo 'Harness integration contracts passed.'

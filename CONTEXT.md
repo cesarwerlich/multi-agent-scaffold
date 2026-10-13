@@ -10,19 +10,19 @@ Developers starting new projects, and AI coding agents working inside generated 
 
 ## Internal Structure
 
-- `init/` — the payload copied into new projects (docs, scripts, CI, `.agents/`).
-- `skills/`, `agents/`, `references/` — the single source for the agent subsystem, vendored from [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) (MIT — see `NOTICE.md`). Not committed under `init/`; generated into each new repo's `.agents/` at creation time by `new-repo.sh`, `LICENSE` files included.
-- `docs/agents/` — shared tool-neutral personas and playbooks in generated repos.
+- `init/` — the payload copied into new projects (docs, scripts, CI, `init/.agents/`).
+- `skills/`, `agents/`, `references/` — the single source for the agent subsystem, vendored from [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) (MIT — see `NOTICE.md`). Not committed under `init/`; generated into each new repo's .agents directory at creation time by `init/scripts/new-repo.sh`, `LICENSE` files included.
+- `init/docs/agents/` — shared tool-neutral personas and playbooks in generated repos.
 - `docs/adr/` — architectural decisions about the template itself.
 - `scripts/` — validation and maintenance tooling.
 
 ## Architecture
 
-The template is a file tree, not a runtime system. It has no build step, no dependencies, and no deployment target. The only executable entry points are `scripts/validate-template.sh` and `init/scripts/new-repo.sh`.
+The template is a file tree, not a runtime system. It has no build step, no dependencies, and no deployment target. Maintainer entry points are `scripts/validate-template.sh` (which runs `scripts/test-harness.sh`), `init/scripts/new-repo.sh` and `scripts/adopt-existing-repo.sh`. Other scripts under `init/scripts/` ship into generated repos.
 
 New repos receive the `init/` payload. The agent subsystem (`init/.agents/`) is optional — projects that don't use AI agents can delete it.
 
-For multi-tool repos, `AGENTS.md` is the canonical instruction file, while `CLAUDE.md` and `ANTIGRAVITY.md` are thin compatibility wrappers that point back to the shared context.
+For multi-tool repos, `AGENTS.md` is the canonical instruction file. Codex and Antigravity read it natively; `CLAUDE.md` imports it with `@AGENTS.md` because Claude Code skips `AGENTS.md` when a `CLAUDE.md` exists. See `init/docs/agent-tool-loading.md`.
 
 ## Local Commands
 
@@ -43,4 +43,4 @@ For multi-tool repos, `AGENTS.md` is the canonical instruction file, while `CLAU
 
 - This is not a framework, a CLI tool, or a SaaS product.
 - It does not prescribe a tech stack, package manager, or deployment target.
-- It does not replace per-project `CONTEXT.md`, `ROADMAP.md`, or ADRs — it provides the scaffolding for them.
+- It does not replace per-project `CONTEXT.md`, `init/docs/roadmap.md`, or ADRs — it provides the scaffolding for them.
