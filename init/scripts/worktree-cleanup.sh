@@ -1,27 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
 cd "$(dirname "$0")/.."
-
-if [ "$#" -lt 1 ]; then
-  echo "Usage: ./scripts/worktree-cleanup.sh <issue-number-slug-or-path>"
-  exit 1
-fi
-
-ARG="$1"
-
-if [[ "${ARG}" == .worktrees/* ]]; then
-  WORKTREE_PATH="${ARG}"
-else
-  WORKTREE_PATH=".worktrees/${ARG}"
-fi
-
-if [ ! -d "${WORKTREE_PATH}" ]; then
-  echo "Worktree not found: ${WORKTREE_PATH}"
-  exit 1
-fi
-
-git worktree remove "${WORKTREE_PATH}"
-git worktree prune
-
-echo "Removed ${WORKTREE_PATH} and pruned stale entries."
+die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
+[ "$#" -ge 1 ] && [ "$#" -le 2 ] || die "Usage: worktree-cleanup.sh <issue-slug> [local-base-branch]"
+ARG="${1#.worktrees/}"
+BASE="${2:-main}"
+[[ "$ARG" =~ ^[1-9][0-9]*-[a-z0-9]+(-[a-z0-9]+)*$ ]] || die "expected issue-slug under .worktrees"
+ROOT="$(pwd -P)"
+TARGET="$ROOT/.worktrees/$ARG"
+[ -d "$TARGET" ] && [ ! -L "$TARGET" ] || die "worktree missing or symlinked"
+REGISTERED="$(git worktree list --porcelain | sed -n 's/^worktree //p')"
+printf '%s\n' "$REGISTERED" | grep -Fxq "$TARGET" || die "not a registered worktree"
+[ "$(git -C "$TARGET" rev-parse --show-toplevel)" = "$TARGET" ] || die "worktree path mismatch"
+[ -z "$(git -C "$TARGET" status --porcelain --untracked-files=all --ignored)" ] || die "local changes or ignored artifacts exist; preserve them manually"
+BRANCH="$(git -C "$TARGET" branch --show-current)"
+[ -n "$BRANCH" ] && [ "$BRANCH" != "$BASE" ] || die "detached or base branch"
+git check-ref-format --branch "$BASE" >/dev/null || die "invalid base branch"
+git show-ref --verify --quiet "refs/heads/$BASE" || die "local base unavailable"
+git merge-base --is-ancestor "$BRANCH" "$BASE" || die "lane not merged into local base; fetch/update base or review squash merge manually"
+git worktree remove "$TARGET"
+printf 'Removed %s; branch retained.\n' "$TARGET"

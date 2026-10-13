@@ -6,10 +6,11 @@ pointers back here.
 
 ## Start Every Session
 
-Read these three first — they are kept small on purpose:
+Read the shared context first:
 
 1. `CONTEXT.md` — what the project is, its architecture, and constraints.
-2. `TASKS.md` — current objective, active work, and handoff state.
+2. The assigned GitHub Issue and PR, including comments — scope and current state.
+   For local-only work without GitHub tracking, read `TASKS.md` instead.
 3. `DECISIONS.md` — accepted decisions still in force.
 
 Then read on demand, only when the task needs it:
@@ -25,20 +26,19 @@ changes, never revert unrelated work, and choose the smallest useful change.
 
 ## Coordinating Multiple Sessions
 
-Several terminals or agents may work this repo at once. Coordinate through files,
-not memory:
+GitHub-backed work uses one Issue → one registered worktree → one branch → one
+PR → independent review. Use `scripts/worktree-bootstrap.sh` to start or resume;
+commit intended changes explicitly, then use `scripts/worktree-finish.sh`.
+Record pickup, blockers and handoff on the Issue/PR. Do not mirror them in TASKS
+or a Markdown status board. GitHub is optional: for local-only work, use TASKS
+as the sole handoff surface. Never maintain both as canonical live state.
 
-- **Claim** your work by adding/updating a row in `TASKS.md` → *Active Work* at
-  session start. Your branch or worktree is the lock key.
-- **Isolate** concurrent tasks in separate git worktrees or branches so two
-  sessions never edit the same files at once.
-- **Hand off** before stopping: write the next action and blockers into
-  `TASKS.md`, and move finished items to *Recently Done*.
-- Never edit another session's active task row.
+Preserve other sessions' work. A branch name identifies a lane, not a lock;
+coordinate overlapping scope explicitly before editing.
 
 ## Keep Context Lean
 
-- `TASKS.md` is rewritten in place — do not let it grow into a log.
+- For local-only work, `TASKS.md` is rewritten in place — do not let it grow into a log.
 - Use `git log` for execution history. Do not paste step-by-step run logs into
   `docs/journal.md`.
 - `docs/memory.md` holds only durable, reusable facts and traps — not narration.
@@ -82,8 +82,21 @@ If checks cannot run, explain why and what remains unverified.
 ## Where Knowledge Lives
 
 - Architecture / constraints → `CONTEXT.md`
-- Current work / handoff → `TASKS.md`
+- Current work / handoff → GitHub Issue/PR; `TASKS.md` only for local-only work
 - Accepted decisions → `DECISIONS.md` (deeper records in `docs/adr/`)
 - Future direction → `docs/roadmap.md`
 - Durable lessons / traps → `docs/memory.md`
 - Historical narrative → `docs/journal.md`
+
+## Risk and Review
+
+Within an authorized Issue, routine reversible edits, tests, commits and PR
+updates may proceed autonomously. Escalate material architecture/scope changes,
+security or PII boundaries, paid actions, irreversible production mutations and
+external writes beyond the authorized lane. Approval applies to the concrete
+action and target; tool availability is not authorization.
+
+An independent reviewer reads the Issue and actual diff, runs appropriate checks,
+and records PASS, REQUEST CHANGES or ESCALATE with the reviewed commit SHA and
+evidence. New commits require review of the changed head. Required checks and
+repository protections still apply. Implementers never merge their own PRs.

@@ -22,7 +22,7 @@ This file explains why each area of this repo exists, what it's for, and how to 
   - `docs/memory.md` — curated durable facts, traps, and compiled Q&A. Reread on demand.
   - `docs/journal.md` — chronological working notes and decision discussion. Rotated to `docs/history/` when it gets long.
   - `docs/history/` — archive of older journal entries.
-  - `TASKS.md` — live current-state handoff (what's active right now, who owns it, what's next).
+  - `TASKS.md` (local-only; use the Issue/PR for GitHub work) — live current-state handoff (what's active right now, who owns it, what's next).
 - **How to use it:** `docs/memory.md` is for facts worth keeping forever. `docs/journal.md` is for "we talked about X and decided Y because Z." `git log` is for "what code changed and when." Don't duplicate `git log` in the journal.
 - **Why it matters:** AI agents lose all context when a session ends. The only durable record is what's written to files.
 
@@ -33,7 +33,7 @@ This file explains why each area of this repo exists, what it's for, and how to 
 - **What it is:** A living record of priorities, open questions, and what's explicitly not being pursued right now.
 - **Goal:** Any contributor knows what matters next — and what's out of scope — without asking.
 - **Files:** `docs/roadmap.md`
-- **How to use it:** Keep it high-level: directions, trade-offs, and open questions. Not tickets. `TASKS.md` carries active work; the roadmap carries horizon-level intent. Update it when direction changes, not just when work completes.
+- **How to use it:** Keep it high-level: directions, trade-offs, and open questions. Not tickets. `TASKS.md` (local-only; use the Issue/PR for GitHub work) carries active work; the roadmap carries horizon-level intent. Update it when direction changes, not just when work completes.
 - **Why it matters:** Without a written roadmap, priorities live in one person's head. Agents fill the gap by inventing their own, which causes drift.
 
 ---
@@ -95,14 +95,14 @@ This file explains why each area of this repo exists, what it's for, and how to 
 - **What it is:** A coordination system that lets multiple agents (or humans) work on the same repo in parallel without conflicts.
 - **Goal:** Parallel sessions are coordinated, not chaotic. Any session can be picked up and handed off cleanly mid-task.
 - **Files:**
-  - `TASKS.md` — Active Work table (keyed by task, owner, branch/worktree, status, next-action, blockers).
+  - `TASKS.md` (local-only; use the Issue/PR for GitHub work) — Active Work table (keyed by task, owner, branch/worktree, status, next-action, blockers).
   - `AGENTS.md` — multi-session coordination protocol: claim, isolate, update, hand off.
 - **How to use it:**
-  1. Before starting: claim a row in `TASKS.md` Active Work table. Set your branch/worktree name.
+  1. Before starting: claim a row in `TASKS.md` (local-only; use the Issue/PR for GitHub work) Active Work table. Set your branch/worktree name.
   2. While working: update your row's status and next-action as you go.
-  3. Before stopping: fill the Handoff block in `TASKS.md` with current objective, definition of done, and blockers.
+  3. Before stopping: fill the Handoff block in `TASKS.md` (local-only; use the Issue/PR for GitHub work) with current objective, definition of done, and blockers.
   4. Always work on a dedicated branch — never directly on `main`. PRs are the merge gate.
-- **Why it matters:** Multiple agents on the same repo without coordination cause merge conflicts, duplicated work, and lost context. `git worktree` gives filesystem isolation; `TASKS.md` gives session-level coordination.
+- **Why it matters:** Multiple agents on the same repo without coordination cause merge conflicts, duplicated work, and lost context. `git worktree` gives filesystem isolation; `TASKS.md` (local-only; use the Issue/PR for GitHub work) gives session-level coordination.
 
 ---
 
@@ -115,7 +115,7 @@ This file explains why each area of this repo exists, what it's for, and how to 
   - `.agents/skills/` — workflow instructions per domain (20+ skills: build, review, security, shipping, etc.).
   - `docs/agents/` — tool-neutral playbooks usable across agent tools.
   - `docs/agents/project-roster.md` — this project's defined agent team (fill in when setting up).
-- **How to use it:** Define your project's agent team in `docs/agents/project-roster.md`. Create a persona file in `.claude/agents/<role>.md` for each role you need. The tech lead / orchestrator breaks work into tasks, assigns rows in `TASKS.md`, and reviews worker output before merging. Worker agents own their lane and hand off when done.
+- **How to use it:** Define your project's agent team in `docs/agents/project-roster.md`. Create a persona file in `.claude/agents/<role>.md` for each role you need. The tech lead / orchestrator breaks work into tasks, assigns rows in `TASKS.md` (local-only; use the Issue/PR for GitHub work), and reviews worker output before merging. Worker agents own their lane and hand off when done.
 - **Why it matters:** A single agent handling everything uses more context and produces lower-quality output than a focused team. Specialist prompts consistently outperform generalist prompts for deep tasks.
 
 ---

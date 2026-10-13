@@ -39,7 +39,7 @@ The minimal profile creates these files (never overwrites existing ones):
 | File | Purpose |
 | --- | --- |
 | `CONTEXT.md` | Purpose, architecture, constraints — fill in after adoption |
-| `TASKS.md` | Live handoff: current work, active sessions, next action |
+| `TASKS.md` (local-only; use the Issue/PR for GitHub work) | Optional local-only handoff; GitHub work stays on Issues/PRs |
 | `DECISIONS.md` | Accepted decisions still in force |
 | `AGENTS.md` | Canonical agent contract (session start, coordination, safety) |
 | `PLAYBOOK.md` | Why each area exists and how to use it — onboarding for humans and agents |

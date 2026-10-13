@@ -20,7 +20,7 @@ cp .env.example .env
 Read these first (kept small on purpose):
 
 - `CONTEXT.md` - purpose, architecture, constraints, and local commands.
-- `TASKS.md` - current objective, active work, and handoff between sessions.
+- `TASKS.md` (local-only; use the Issue/PR for GitHub work) - current objective, active work, and handoff between sessions.
 - `DECISIONS.md` - accepted decisions still in force.
 - `AGENTS.md` - the canonical contract for AI coding agents.
 
@@ -48,7 +48,7 @@ node ./scripts/lane-update.mjs --help
 ```text
 .
   CONTEXT.md      Purpose, architecture, constraints
-  TASKS.md        Live handoff: current objective, active work, next action
+  TASKS.md        Optional local-only handoff
   DECISIONS.md    Accepted decisions still in force
   AGENTS.md       Canonical contract for AI coding agents
   scripts/        Bootstrap, checks, and project automation

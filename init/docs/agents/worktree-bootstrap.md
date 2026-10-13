@@ -51,3 +51,17 @@ After merge:
 ```bash
 ./scripts/worktree-cleanup.sh 17-lane-protocol
 ```
+
+## Recovery and preservation
+
+Start again with the same issue, slug and AGENT_TOOL to resume the exact
+registered worktree. Existing changes remain untouched. A collision or missing
+registered path fails: inspect `git worktree list --porcelain` and preserve work
+before manual repair. The helper does not fetch; update the chosen local base
+before starting a new lane. It never copies `.env` or credentials.
+
+Cleanup accepts an optional local base branch (default `main`). Update that base
+after merge. Cleanup refuses tracked, untracked or ignored artifacts and branches
+not merged by ancestry; it retains branch refs and never forces removal. Squash
+merges require manual equivalence review. Move necessary local artifacts to a safe
+location before retrying; do not delete them merely to pass a check.

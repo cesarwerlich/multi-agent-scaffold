@@ -1,3 +1,4 @@
+<!-- GitHub-backed projects use Issues/PRs for live state. Every TASKS reference below applies only to local-only work. -->
 # Agent Roster
 
 Define your project's agent team here. Each role maps to a persona file in `.claude/agents/<role>.md`.
@@ -13,13 +14,13 @@ Define your project's agent team here. Each role maps to a persona file in `.cla
 
 | Role | Slug | Scope | Session start reads | Out of scope |
 |---|---|---|---|---|
-| Tech Lead / Orchestrator | `tech-lead` | Architecture, task breakdown, final review before merge | `CONTEXT.md`, `TASKS.md`, `DECISIONS.md` | Direct implementation — spawns workers instead |
-| Backend Engineer | `backend` | API, data layer, services, database | `CONTEXT.md`, `TASKS.md`, relevant `src/` files | Frontend, infra |
-| Frontend Engineer | `frontend` | UI, components, styles, accessibility | `CONTEXT.md`, `TASKS.md`, relevant `src/` files | API design, database, infra |
+| Tech Lead / Orchestrator | `tech-lead` | Architecture, task breakdown, final review before merge | `CONTEXT.md`, `TASKS.md` (local-only; use the Issue/PR for GitHub work), `DECISIONS.md` | Direct implementation — spawns workers instead |
+| Backend Engineer | `backend` | API, data layer, services, database | `CONTEXT.md`, `TASKS.md` (local-only; use the Issue/PR for GitHub work), relevant `src/` files | Frontend, infra |
+| Frontend Engineer | `frontend` | UI, components, styles, accessibility | `CONTEXT.md`, `TASKS.md` (local-only; use the Issue/PR for GitHub work), relevant `src/` files | API design, database, infra |
 | Security Reviewer | `security` | Auth, secrets, input validation, dependency CVEs | `SECURITY.md`, `.agents/references/security-checklist.md` | Feature implementation |
 | DevOps / Infra | `devops` | CI/CD, deployment, observability, rollback | `docs/operations.md`, `docs/release.md` | Application code |
 | ML / AI Engineer | `ml` | Model integration, evals, prompt design, benchmarks | `CONTEXT.md`, `docs/evals.md` | Infrastructure, UI |
-| Data Engineer | `data` | Pipelines, ETL, schemas, data quality | `CONTEXT.md`, `TASKS.md` | Application UI, infra |
+| Data Engineer | `data` | Pipelines, ETL, schemas, data quality | `CONTEXT.md`, `TASKS.md` (local-only; use the Issue/PR for GitHub work) | Application UI, infra |
 
 Delete unused rows. Add project-specific roles as needed.
 
@@ -39,7 +40,7 @@ You are the [role] for [Project Name].
 ## Session Start
 Read in order:
 1. `CONTEXT.md` — understand the system shape and constraints
-2. `TASKS.md` — find your active task row (filter by your role/branch)
+2. `TASKS.md` (local-only; use the Issue/PR for GitHub work) — find your active task row (filter by your role/branch)
 3. [Add role-specific files, e.g. `docs/operations.md` for devops]
 
 ## Scope
@@ -52,12 +53,12 @@ Escalate to tech-lead when: [what requires orchestrator sign-off]
 
 ## Hand-Off Protocol
 When done with a task:
-- Update your row in `TASKS.md` (status → done, next-action → review)
-- Fill the Current Handoff block in `TASKS.md`
+- Update your row in `TASKS.md` (local-only; use the Issue/PR for GitHub work) (status → done, next-action → review)
+- Fill the Current Handoff block in `TASKS.md` (local-only; use the Issue/PR for GitHub work)
 - Notify the tech-lead or orchestrator
 
 When blocked:
-- Add blockers to your `TASKS.md` row
+- Add blockers to your `TASKS.md` (local-only; use the Issue/PR for GitHub work) row
 - Fill the Handoff block with "blocked on: [reason]"
 - Hand off rather than waiting idle
 ```
@@ -68,7 +69,7 @@ When blocked:
 
 The tech lead (or orchestrator agent) owns:
 
-- Breaking work into tasks and writing rows in `TASKS.md`
+- Breaking work into tasks and writing rows in `TASKS.md` (local-only; use the Issue/PR for GitHub work)
 - Assigning tasks to the right specialist role
 - Reviewing worker output before merging to `main`
 - Resolving architectural questions → write an ADR in `docs/adr/`

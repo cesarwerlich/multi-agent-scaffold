@@ -86,7 +86,7 @@ copy_missing() {
     return
   fi
 
-  if [ -e "$dest" ]; then
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
     skipped+=("$src_rel")
     return
   fi
@@ -124,6 +124,7 @@ copy_minimal() {
     scripts/bootstrap.sh \
     scripts/lane-update.mjs \
     scripts/worktree-bootstrap.sh \
+    scripts/worktree-finish.sh \
     scripts/worktree-cleanup.sh
   do
     copy_missing "$item"
@@ -170,7 +171,7 @@ if [ "$profile" = "full" ]; then
     if [ ! -d "$src" ]; then
       continue
     fi
-    if [ -e "$dest" ]; then
+    if [ -e "$dest" ] || [ -L "$dest" ]; then
       skipped+=("$dest_rel")
       continue
     fi
@@ -184,7 +185,7 @@ fi
 
 if [ "$with_evals_dir" -eq 1 ]; then
   evals_readme="$target_dir/evals/README.md"
-  if [ -e "$evals_readme" ]; then
+  if [ -e "$evals_readme" ] || [ -L "$evals_readme" ]; then
     skipped+=("evals/README.md")
   else
     created+=("evals/README.md")
@@ -260,8 +261,11 @@ if [ "$report_only" -eq 1 ]; then
   fi
 else
   mkdir -p "$(dirname "$report_path")"
-  write_report "$report_path"
-  chmod +x "$target_dir"/scripts/*.sh 2>/dev/null || true
+  if [ -e "$report_path" ] || [ -L "$report_path" ]; then
+    echo "Skipped existing adoption report: $report_rel"
+  else
+    write_report "$report_path"
+  fi
   echo "Adopted repo-template profile '$profile' into $target_dir"
   echo "Report: $report_rel"
 fi

@@ -69,3 +69,22 @@ This file is for evaluation criteria, benchmark notes, and repeatable quality ch
 ## Notes
 
 For repos that never run benchmarks or agent evaluations, this file can stay empty or be removed.
+
+## Minimal coding-agent comparison (optional)
+
+Choose one small repository task with a fixed base commit and hidden acceptance
+checks reviewed by a maintainer. Use a fresh registered worktree per run; provide
+the same Issue, AGENTS and context budget. Pin task/fixture version, tool/model
+version, available tools, time limit and attempt count. Run at least three attempts
+per configuration before comparing; retain failed and interrupted attempts.
+
+Record base/head SHA, exact invocation (redact secrets), tests passed/total, scope
+violations, human interventions, resume outcome, elapsed time and known cost or
+`unknown`. Store sanitized evidence with each result. Score correctness first;
+report counts and failures, not just an average. Never call an unrun trial passed.
+
+Start with a no-network fixture: repair an idempotent worktree start without
+losing a dirty file; acceptance checks repeat start, path collision and interrupted
+registration. Keep fixtures and scoring unchanged across the baseline and candidate.
+Deterministic script tests establish harness behavior; they are not agent benchmark
+results. Do not run paid APIs or external writes as part of this protocol.
