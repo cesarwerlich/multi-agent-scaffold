@@ -1,0 +1,23 @@
+# Additional source-only exclusions; .gitignore remains in effect.
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.crt
+*.cert
+credentials.json
+.cache/
+.worktrees/
+node_modules/
+vendor/
+.venv/
+data/
+coverage/
+dist/
+build/
+*.log
+*.zip
+*.pdf
+*.png
+*.jpg

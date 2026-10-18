@@ -52,6 +52,13 @@ required_files=(
   "init/PLAYBOOK.md"
   "scripts/adopt-existing-repo.sh"
   "scripts/test-harness.sh"
+  "scripts/test-reference-context.sh"
+  "scripts/enable-reference-context.sh"
+  "optional/reference-context/scripts/reference-search.sh"
+  "optional/reference-context/docs/reference-context.md"
+  "optional/reference-context/docs/references/README.md"
+  "optional/reference-context/.codex/config.toml"
+  "optional/reference-context/.xerjignore"
 )
 
 for path in "${required_files[@]}"; do
@@ -111,5 +118,6 @@ if [ "$failures" -gt 0 ]; then
 fi
 
 ./scripts/test-harness.sh
+./scripts/test-reference-context.sh
 
 echo "Template validation passed."

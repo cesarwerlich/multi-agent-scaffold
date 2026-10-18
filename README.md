@@ -89,6 +89,22 @@ Profiles: `minimal` (default, core docs + agent files), `github` (adds CI/PR tem
 
 See `docs/adopting-existing-repos.md` for what gets created, folder guidance, and conflict-safe adoption details.
 
+## Optional reference context
+
+Ordinary creation/adoption does not enable reference tooling. After initializing
+a new Git repository, explicitly opt in from the template checkout:
+
+```bash
+./scripts/enable-reference-context.sh /path/to/new-project
+```
+
+This adds a bounded read-only CLI helper, empty reference catalog, source
+exclusions and a repository-local AgentMemory disable override. Existing config
+or other destination files cause refusal before copying; integrate manually.
+No binaries, nodes, indexes, hooks or global settings are installed. See the
+[operator guide](optional/reference-context/docs/reference-context.md) and
+[review evidence](docs/reference-context-audit.md).
+
 ## Maintain It
 
 1. Read `CONTEXT.md` — template's own architecture and constraints.

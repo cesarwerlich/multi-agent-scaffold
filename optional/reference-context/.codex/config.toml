@@ -1,0 +1,3 @@
+# Explicit opt-in repository override. Never installed globally.
+[mcp_servers.agentmemory]
+enabled = false
