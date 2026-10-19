@@ -7,8 +7,18 @@ target="$(cd "$1" && pwd -P)"
 [ "$(git -C "$target" rev-parse --show-toplevel)" = "$target" ] || {
   echo 'Target must be a Git checkout root' >&2; exit 1;
 }
-git -C "$target" check-ignore -q .cache/reference-context/probe || {
-  echo 'Ignore .cache/ in this repository before enabling reference context' >&2; exit 1;
+# Check the state root and real sensitive destinations, not an ignorable probe.
+for sensitive in .cache/reference-context/ .cache/reference-context/data/ \
+  .cache/reference-context/data/admin.key .cache/reference-context/bin/xerj \
+  .cache/reference-context/port .cache/reference-context/node.pid \
+  .cache/reference-context/node.log .cache/reference-context/code/ \
+  .cache/reference-context/hub/; do
+  git -C "$target" check-ignore -q "$sensitive" || {
+    echo "Ignore repository-local state before enabling: $sensitive" >&2; exit 1;
+  }
+done
+[ -z "$(git -C "$target" ls-files -- .cache/reference-context)" ] || {
+  echo 'Tracked local tool state must be removed from the index before enabling' >&2; exit 1;
 }
 files=(scripts/reference-search.sh docs/reference-context.md docs/references/README.md .codex/config.toml .xerjignore)
 # Preflight every destination before copying anything, including parent links.

@@ -8,7 +8,7 @@ trap 'rm -rf "$fixture"' EXIT
 fail() { echo "FAIL: $*" >&2; exit 1; }
 reject() { if "$@" > "$fixture/rejected.log" 2>&1; then fail "unexpected success: $*"; fi; }
 "$root/init/scripts/new-repo.sh" "$fixture/generated project" Reference > /dev/null
-[ ! -e "$fixture/generated/scripts/reference-search.sh" ] || fail 'enabled by default'
+[ ! -e "$fixture/generated project/scripts/reference-search.sh" ] || fail 'enabled by default'
 git -C "$fixture/generated project" init -q
 "$root/scripts/enable-reference-context.sh" "$fixture/generated project" > /dev/null
 repo="$fixture/generated project"
@@ -27,6 +27,18 @@ mkdir -p "$fixture/unignored"
 git -C "$fixture/unignored" init -q
 reject "$root/scripts/enable-reference-context.sh" "$fixture/unignored"
 [ ! -e "$fixture/unignored/.codex/config.toml" ] || fail 'unignored runtime accepted'
+for policy in probe-only negated-key; do
+  broken="$fixture/$policy"
+  mkdir -p "$broken"
+  git -C "$broken" init -q
+  if [ "$policy" = probe-only ]; then
+    printf '.cache/reference-context/probe\n' > "$broken/.gitignore"
+  else
+    printf '.cache/reference-context/*\n!.cache/reference-context/data/\n.cache/reference-context/data/*\n!.cache/reference-context/data/admin.key\n' > "$broken/.gitignore"
+  fi
+  reject "$root/scripts/enable-reference-context.sh" "$broken"
+  [ ! -e "$broken/.codex/config.toml" ] || fail 'unsafe ignore policy caused partial install'
+done
 mkdir -p "$fixture/parent-file"
 git -C "$fixture/parent-file" init -q
 printf '.cache/\n' > "$fixture/parent-file/.gitignore"
