@@ -204,4 +204,12 @@ printf 'Read `docs/memory.md`, `./scripts/`, `CLAUDE.local.md`, `.agents/skills/
 printf 'Ground in `ROADMAP.md`.\n' > "$docs/CLAUDE.md"
 reject "$root/scripts/check-doc-paths.sh" "$docs" AGENTS.md CLAUDE.md
 grep -q 'CLAUDE.md names missing path: ROADMAP.md' "$fixture/rejected.log" || fail 'path check missed a stale path'
+# Worktree audit: lanes under .worktrees pass; a sibling folder is rejected.
+cd "$fixture/generated"
+./scripts/worktree-audit.sh main > /dev/null || fail 'audit rejected a clean repo'
+git worktree add -q -b codex/stray "$fixture/stray-sibling" main
+reject ./scripts/worktree-audit.sh main
+grep -q 'OUTSIDE allowed roots' "$fixture/rejected.log" || fail 'audit missed a sibling worktree'
+WORKTREE_AUDIT_ALLOW="$fixture" ./scripts/worktree-audit.sh main > /dev/null || fail 'audit ignored WORKTREE_AUDIT_ALLOW'
+git worktree remove "$fixture/stray-sibling"
 echo 'Harness integration contracts passed.'
