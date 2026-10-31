@@ -212,4 +212,9 @@ reject ./scripts/worktree-audit.sh main
 grep -q 'OUTSIDE allowed roots' "$fixture/rejected.log" || fail 'audit missed a sibling worktree'
 WORKTREE_AUDIT_ALLOW="$fixture" ./scripts/worktree-audit.sh main > /dev/null || fail 'audit ignored WORKTREE_AUDIT_ALLOW'
 git worktree remove "$fixture/stray-sibling"
+# Run from a linked worktree: the main checkout is still the root, so a lane under .worktrees stays ok.
+mkdir -p .worktrees
+git worktree add -q -b codex/lane-audit .worktrees/lane-audit main
+(cd .worktrees/lane-audit && ./scripts/worktree-audit.sh main > /dev/null) || fail 'audit mis-resolved the root from a linked worktree'
+git worktree remove .worktrees/lane-audit
 echo 'Harness integration contracts passed.'

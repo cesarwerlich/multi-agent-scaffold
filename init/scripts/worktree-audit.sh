@@ -6,7 +6,8 @@
 # so the lane script alone cannot keep sibling folders out of the parent dir.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-ROOT="$(pwd -P)"
+# Resolve the main checkout even when run from a linked worktree.
+ROOT="$(cd "$(git rev-parse --git-common-dir)/.." && pwd -P)"
 BASE="${1:-main}"
 bad=0
 path=""; branch=""; prunable=""
