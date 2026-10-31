@@ -33,6 +33,13 @@ Record pickup, blockers and handoff on the Issue/PR. Do not mirror them in TASKS
 or a Markdown status board. GitHub is optional: for local-only work, use TASKS
 as the sole handoff surface. Never maintain both as canonical live state.
 
+Create worktrees only inside the repository, in the .worktrees folder or the
+tool's own in-repo worktree root; never as a sibling folder of the repository
+or in /tmp. Agent tools can create worktrees on their own, so run
+`scripts/worktree-audit.sh` at session start and after a lane merges; it lists
+every worktree and fails on any outside the allowed roots. Remove merged lanes
+with `scripts/worktree-cleanup.sh`.
+
 Preserve other sessions' work. A branch name identifies a lane, not a lock;
 coordinate overlapping scope explicitly before editing.
 
